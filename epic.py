@@ -15,6 +15,7 @@ pygame.display.init()
 # Settings
 check_delay = 120 #minutes
 rotate_delay = 20 #seconds
+image_type = natural #natural or enhanced color images
 
 # Set up the drawing window
 screen = pygame.display.set_mode([480,480], pygame.FULLSCREEN)
@@ -33,7 +34,7 @@ print("Rotating photos every "+str(rotate_delay)+" seconds")
 
 def get_epic_images_json():
     # Call the epic api
-    response = requests.get("https://epic.gsfc.nasa.gov/api/natural")
+    response = requests.get("https://epic.gsfc.nasa.gov/api/"+str(image_type))
     imjson = response.json()
     return imjson
 
@@ -42,7 +43,7 @@ def create_image_urls(photos):
     urls = []
     for photo in photos:
         dt = datetime.datetime.strptime(photo["date"], "%Y-%m-%d %H:%M:%S")
-        imageurl = "https://epic.gsfc.nasa.gov/archive/natural/"+str(dt.year)+"/"+str(dt.month).zfill(2)+"/"+str(dt.day).zfill(2)+"/jpg/"+photo["image"]+".jpg"
+        imageurl = "https://epic.gsfc.nasa.gov/archive/"+str(image_type)+"/"+str(dt.year)+"/"+str(dt.month).zfill(2)+"/"+str(dt.day).zfill(2)+"/jpg/"+photo["image"]+".jpg"
         urls.append(imageurl)    
     return urls
     
@@ -127,5 +128,3 @@ while running:
 
 # Done! Time to quit.
 pygame.quit()
-
-
